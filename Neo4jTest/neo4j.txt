@@ -1,0 +1,75 @@
+create (person:Person{name:"军长"})
+
+match (person:Person) where person.name='军长' return person
+
+
+match (person:Person) where person.name='军长'
+create (command:Command{name:"命令"}),
+(army:Army{name:"部队"}),
+(defense:Defense{name:"国防部"}),
+(class:Class{name:"class"}),
+(person)-[:发出]->(command),
+(person)-[:属于]->(army),
+(army)-[:属于]->(class),
+(defense)-[:属于]->(class),
+(command)-[:属于]->(class),
+(army)-[:subClassOf]->(defense)
+
+
+match (command:Command)-[]-(n) return command,n
+
+//查看所有节点和关系
+match (person:Person)-[:发出]-(n),(p)-[:属于]-(q) return person,n,q,p
+
+match (person:Person{name:"军长"})-[]-(n) return person,n
+
+match m = (person:Person{name:"军长"})-[]-(n) return m
+
+match (person:Person)-[:属于]-(m)-[:subClassOf]-(e) where person.name="军长" return person,m,e
+
+
+
+
+
+
+
+
+
+
+
+人物知识图谱
+create (person111:People{name:"姚明"}),
+(career111:Career{name:"篮协主席"}),
+(person211:People{name:"叶莉"}),
+(person311:People{name:"姚沁蕾"}),
+(person411:People{name:"孙悦"}),
+(person511:People{name:"易建联"}),
+(person611:People{name:"李秋平"}),
+(person111)-[relation11:Ocp{roles:"职业"}]->(career111),
+(person111)-[relation21:Relation{roles:"妻子"}]->(person211),
+(person111)-[relation31:Relation{roles:"女儿"}]->(person311),
+(person111)-[relation41:Relation{roles:"队友"}]->(person411),
+(person511)-[relation51:Relation{roles:"队友"}]->(person111),
+(person111)-[relation61:Relation{roles:"师傅"}]->(person611)
+
+
+match  (person111:People{name:{x}})-[r]-(n) return person111,r,n
+
+match (m)-[relation:Relation{roles:{x}}]->(n) return m,n
+
+match (person:People)-[r]-(m)-[l]-(e) where person.name={x} and e.name={y}return person,m,e,r,l
+
+
+
+
+
+match (person111:People)-[]-(n) return person111,n
+
+match (person111:People)-[r]-(n) 
+delete person111,n,r
+
+match (n)-[r]-(person2:People{name:"叶莉"}) return r,n
+
+
+
+
